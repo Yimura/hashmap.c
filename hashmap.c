@@ -2,11 +2,6 @@
 // Use of this source code is governed by an MIT-style
 // license that can be found in the LICENSE file.
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <stddef.h>
 #include "hashmap.h"
 
 #define GROW_AT   0.60 /* 60% */
@@ -112,10 +107,6 @@ struct hashmap *hashmap_new_with_allocator(void *(*_malloc)(size_t),
     _malloc = _malloc ? _malloc : __malloc ? __malloc : NULL;
     _realloc = _realloc ? _realloc : __realloc ? __realloc : NULL;
     _free = _free ? _free : __free ? __free : NULL;
-
-    assert(("no valid allocator has been given", _malloc != NULL));
-    assert(("no valid re-allocator has been given", _realloc != NULL));
-    assert(("no valid free has been given", _free != NULL));
 
     size_t ncap = 16;
     if (cap < ncap) {
