@@ -109,9 +109,14 @@ struct hashmap *hashmap_new_with_allocator(void *(*_malloc)(size_t),
     void (*elfree)(void *item),
     void *udata)
 {
-    _malloc = _malloc ? _malloc : __malloc ? __malloc : malloc;
-    _realloc = _realloc ? _realloc : __realloc ? __realloc : realloc;
-    _free = _free ? _free : __free ? __free : free;
+    _malloc = _malloc ? _malloc : __malloc ? __malloc : NULL;
+    _realloc = _realloc ? _realloc : __realloc ? __realloc : NULL;
+    _free = _free ? _free : __free ? __free : NULL;
+
+    assert(("no valid allocator has been given", _malloc != NULL));
+    assert(("no valid re-allocator has been given", _realloc != NULL));
+    assert(("no valid free has been given", _free != NULL));
+
     size_t ncap = 16;
     if (cap < ncap) {
         cap = ncap;
@@ -1149,6 +1154,3 @@ int main(void) {
 
 
 #endif
-
-
-
